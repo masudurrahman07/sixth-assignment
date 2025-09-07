@@ -56,7 +56,7 @@ body{
 
 .nav-menu{
   display:flex;
-  gap:18px;
+  gap:15px;
   align-items:center;
 }
 
@@ -439,5 +439,62 @@ footer p{
   font-size: 18px;
   cursor: pointer;
 }
+
+/* Responsiveness*/
+
+@media (max-width: 640px) {
+  
+  .nav-inner {
+    justify-content: space-between;
+  }
+  .nav-menu {
+    flex-direction: row;
+    margin-left: 2px;
+  }
+
+  .leaf-left { 
+  width: 200px;
+  height: auto; 
+   margin-top: 260px;
+   margin-left: -20px;
+}
+
+.leaf-right{
+  width: 200px;
+  height: auto;
+  margin-top: 260px;
+  margin-right: -20px;
+}
+
+  .main-grid {
+    grid-template-columns: 1fr; 
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr; 
+  }
+
+  .about-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-image img {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .impact-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cart {
+    margin-top: 20px;
+  }
+}
+
+
 
 

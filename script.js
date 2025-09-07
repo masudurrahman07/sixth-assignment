@@ -1,31 +1,39 @@
 
-// ======== DOM ELEMENTS ========
-const categoriesList = document.getElementById('categoriesList');
-const cardsGrid = document.getElementById('cardsGrid');
-const spinner = document.getElementById('spinner');
-const cartList = document.getElementById('cartList');
-const cartTotal = document.getElementById('cartTotal');
-const modal = document.getElementById('modal');
+// dom elements here
+const GridCard = document.getElementById('card-grid');
+const categoriesList = document.getElementById('category-list');
+const daisySpinner = document.getElementById('spinner');
+const totalCart = document.getElementById('cartTotal');
+const listCart = document.getElementById('carts-list');
+const modal = document.getElementById('modal-el');
 const modalBody = document.getElementById('modalBody');
-let modalClose; // assign later inside DOMContentLoaded
+let modalClose; 
 
-// ======== STATE ========
+
+
 let cart = [];
 let activeCategoryId = null;
-let plantsMap = {}; // store plants by id for modal
+let plantsMap = {}; 
 
-// ======== HELPER FUNCTIONS ========
+
+
 const showSpinner = () => {
-  spinner.classList.remove('hidden');
-  cardsGrid.classList.add('hidden');
+  daisySpinner.classList.remove('hidden');
+  GridCard.classList.add('hidden');
 };
+
+
+
+
 const hideSpinner = () => {
-  spinner.classList.add('hidden');
-  cardsGrid.classList.remove('hidden');
+  daisySpinner.classList.add('hidden');
+  GridCard.classList.remove('hidden');
 };
+
+
 const formatPrice = (price) => `$${price}`;
 
-// ======== LOAD CATEGORIES ========
+// category functionality
 async function loadCategories() {
   showSpinner();
   try {
@@ -33,7 +41,7 @@ async function loadCategories() {
     const data = await res.json();
     categoriesList.innerHTML = '';
 
-    // "All Trees" button
+    
     const allBtn = document.createElement('button');
     allBtn.className = 'cat-btn active';
     allBtn.textContent = 'All Trees';
@@ -41,7 +49,9 @@ async function loadCategories() {
     allBtn.addEventListener('click', () => handleCategoryClick('all', allBtn));
     categoriesList.appendChild(allBtn);
 
-    // Other category buttons
+
+
+    
     data.categories.forEach(cat => {
       const btn = document.createElement('button');
       btn.className = 'cat-btn';
@@ -51,7 +61,7 @@ async function loadCategories() {
       categoriesList.appendChild(btn);
     });
 
-    // Load all plants by default
+    
     await handleCategoryClick('all', allBtn);
 
   } catch (err) {
@@ -62,13 +72,16 @@ async function loadCategories() {
   }
 }
 
-// ======== CATEGORY CLICK ========
+
+
+
 async function handleCategoryClick(id, btn) {
   activeCategoryId = id;
 
-  // Highlight active button
+  
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+
 
   showSpinner();
   try {
@@ -80,26 +93,27 @@ async function handleCategoryClick(id, btn) {
       const res = await fetch(`https://openapi.programming-hero.com/api/category/${id}`);
       data = await res.json();
     }
+    
 
     if (data.plants && data.plants.length > 0) {
       displayTrees(data.plants);
     } else {
-      cardsGrid.innerHTML = '<p>No trees in this category.</p>';
+      GridCard.innerHTML = '<p>No trees in this category.</p>';
     }
   } catch (err) {
     console.error(err);
-    cardsGrid.innerHTML = '<p>Failed to load trees.</p>';
+    GridCard.innerHTML = '<p>Failed to load trees.</p>';
   } finally {
     hideSpinner();
   }
 }
 
-// ======== DISPLAY TREES ========
+
 function displayTrees(trees) {
-  cardsGrid.innerHTML = '';
+  GridCard.innerHTML = '';
 
   trees.forEach(tree => {
-    // Store tree data for modal
+ 
     plantsMap[tree.id] = tree;
 
     const card = document.createElement('div');
@@ -116,20 +130,23 @@ function displayTrees(trees) {
       </div>
       <button class="add-btn" data-id="${tree.id}" data-name="${tree.name}" data-price="${tree.price}" style="width:100%; margin-top:8px;">Add to Cart</button>
     `;
-    cardsGrid.appendChild(card);
 
-    // Open modal on tree name click
+GridCard.appendChild(card);
+
+   
     card.querySelector('.card-title').addEventListener('click', () => openModal(tree.id));
 
-    // Add to cart
+    
     card.querySelector('.add-btn').addEventListener('click', addToCart);
   });
 }
 
-// ======== MODAL ========
+
+// modal functionality
 function openModal(id) {
   const tree = plantsMap[id];
   if (!tree) return;
+
 
   modalBody.innerHTML = `
     <h2 class="text-xl font-bold mb-2">${tree.name}</h2>
@@ -139,14 +156,18 @@ function openModal(id) {
     <p>${tree.description}</p>
   `;
 
-  modal.classList.remove('hidden'); // show modal
+  modal.classList.remove('hidden'); 
 }
+
+
 
 function closeModal() {
-  modal.classList.add('hidden'); // hide modal
+  modal.classList.add('hidden'); 
 }
 
-// ======== CART ========
+
+
+// cart functionality
 function addToCart(e) {
   const btn = e.target;
   const id = btn.dataset.id;
@@ -162,12 +183,15 @@ function removeFromCart(index) {
   updateCart();
 }
 
+
+
 function updateCart() {
-  cartList.innerHTML = '';
+  listCart.innerHTML = '';
   let total = 0;
 
   cart.forEach((item, index) => {
     total += item.price;
+
 
     const li = document.createElement('li');
     li.className = 'cart-item';
@@ -188,24 +212,24 @@ function updateCart() {
     `;
 
     li.querySelector('.remove').addEventListener('click', () => removeFromCart(index));
-    cartList.appendChild(li);
+    listCart.appendChild(li);
   });
 
-  cartTotal.textContent = `$${total}`;
+  totalCart.textContent = `$${total}`;
 }
 
 
-// ======== INITIALIZE ========
-document.addEventListener('DOMContentLoaded', () => {
-  // assign modalClose AFTER DOM loaded
-  modalClose = document.getElementById('modalClose');
 
-  // attach modal event listeners
-  modalClose.addEventListener('click', closeModal);
+
+document.addEventListener('DOMContentLoaded', () => {
+ modalClose = document.getElementById('modalClose');
+modalClose.addEventListener('click', closeModal);
   modal.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
   });
 
   loadCategories();
 });
+
+
 
