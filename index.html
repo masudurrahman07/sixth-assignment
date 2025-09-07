@@ -57,7 +57,7 @@
           generations.
         </p>
 
-        <button class="btn-hero" id="heroCta">Get Involved</button>
+        <button class="btn-hero">Get Involved</button>
       </div>
     </section>
 
@@ -90,10 +90,10 @@
       </aside>
     </main>
 
-    <!-- campaign section -->
-    <section class="about container" id="gallery">
+    <!-- about the campaign section -->
+    <section class="about" id="gallery">
       <h2 class="section-title">About the Campaign</h2>
-      <div class="about-inner">
+      <div class="about-inner container">
         <div class="about-image">
           <img src="assets/about.png" alt="campaign plant" />
         </div>
@@ -147,12 +147,14 @@
               placeholder="Your Name"
               required
             />
+
             <input
               type="email"
               id="donorEmail"
               placeholder="Your Email Address"
               required
             />
+
             <select id="donationCount" required>
               <option value="">Number of Trees</option>
               <option value="1">1 Tree - $5</option>
@@ -175,11 +177,13 @@
    <!-- modal structure -->
     <div id="modal" class="modal hidden">
       <div class="modal-content">
-        <button id="modalClose" class="modal-close">✖</button>
+        <button id="modalClose" class="modal-close">❌</button>
         <div id="modalBody">
+
         </div>
-      </div>
+        </div>
     </div>
+      
 
     <!-- js file link -->
     <script src="script.js"></script>
